@@ -388,7 +388,7 @@
       }
 
       if (m.data.transcode) {
-        args = args.concat(m.data.transcode);
+        args = args.concat("wcenc:" + m.data.transcode);
       }
 
 
@@ -411,12 +411,6 @@
       }else{
         register_fns.push("_vout_register");
         args.push("vout:!vsync");
-      }
-
-      if (m.data.useWebcodec) {
-        //register_fns.push("_wcdec_register");
-        register_fns.push("_wcenc_register");
-        //register_fns.push("_webgrab_register");
       }
 
       register_fns = register_fns.concat(Object.keys(module).filter(x => x.startsWith("dynCall_") && x.endsWith("_register")));
