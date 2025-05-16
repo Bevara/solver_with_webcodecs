@@ -383,8 +383,16 @@
         var fname = src.split('/').pop();
         const data = await response.arrayBuffer();
         FS.writeFile(fname, new Uint8Array(data));
-        args.push("-i");
-        args.push(fname);
+        if (m.data.interactive || m.data.vr){
+         let interactive_mode = "compositor:player=base:src="+fname;
+          if (m.data.vr){
+            interactive_mode = interactive_mode+"#VR";
+          }
+          args.push(interactive_mode);
+        }else{
+          args.push("-i");
+          args.push(fname);
+        }
       }
 
       if (m.data.transcode) {
@@ -392,7 +400,10 @@
       }
 
 
-      if (m.data.dst) {
+      if (m.data.interactive || m.data.vr) {
+        register_fns.push("_aout_register");
+        register_fns.push("_vout_register");
+      } else if (m.data.dst) {
         register_fns.push("_writegen_register");
         register_fns.push("_fout_register");
         args.push("-o");
